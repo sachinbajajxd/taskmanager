@@ -16,7 +16,7 @@ export async function DELETE(req: Request, {params}:{params : {id: string}}){
             },
         });
 
-        console.log(task, "task deleted");
+        // console.log(task, "task deleted");
         return NextResponse.json(task);
     } catch(error){
         console.log("Error deleting task", error);
@@ -59,7 +59,7 @@ export async function PUT(req: Request, {params}:{params : {id: string}}){
             }
         });
 
-        console.log(task, "task updated");
+        // console.log(task, "task updated");
         return NextResponse.json(task);
     } catch(error){
         console.log("Error updating task", error);

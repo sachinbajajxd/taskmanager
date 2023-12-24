@@ -36,7 +36,7 @@ export async function POST(req: Request) {
             }
         });
 
-        console.log(task, "TASK CREATED SUCCESSFULLY")
+        // console.log(task, "TASK CREATED SUCCESSFULLY")
 
         return NextResponse.json(task)
         
@@ -64,7 +64,7 @@ export async function GET(req: Request) {
             }
         })
 
-        console.log(tasks);
+        // console.log(tasks);
 
         return NextResponse.json(tasks);
 

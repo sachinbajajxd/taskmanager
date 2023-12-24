@@ -17,7 +17,7 @@ const GlobalStyleProvider: React.FC<Props> = ({children}) => {
 const GlobalStyles = styled.div`
     padding: 2.5rem;
     display: flex;
-    gap: 2.5rem;
+    gap: 2rem;
     height: 100%;
     transition: all 0.3s ease-in-out;
 
