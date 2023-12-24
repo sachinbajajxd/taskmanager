@@ -5,11 +5,15 @@ import {useGlobalState} from "@/app/context/globalProvider"
 import Image from "next/image"
 import menu from "@/app/utils/menu"
 import Link from 'next/link'
+import Button from '../Button/Button'
 import { useRouter, usePathname } from 'next/navigation'
+import { logout } from '@/app/utils/Icons'
+import { useClerk, UserButton } from '@clerk/nextjs'
 
 const Sidebar = () => {
 
     const {theme} = useGlobalState()
+    const {signOut} = useClerk()
     const router = useRouter()
     const pathname = usePathname()
 
@@ -22,7 +26,7 @@ const Sidebar = () => {
         <div className="profile">
             <div className="profile-overlay"></div>
             <div className="image">    
-                <Image height={70} width={70} src='/admin.png' alt='profile' />
+                <Image height={50} width={50} src='/admin.png' alt='profile' />
             </div>
             <h1>
                 <span>John</span>
@@ -32,13 +36,26 @@ const Sidebar = () => {
         <ul className="nav-items">
             {menu.map((item) => {
                 const link=item.link
-                return <li className={`nav-item ${pathname===link ? "active" : ""}`} onClick={() => handleClick(link)}>
+                return <li key={item.id} className={`nav-item ${pathname===link ? "active" : ""}`} onClick={() => handleClick(link)}>
                     {item.icon}
                     <Link href={link}>{item.title}</Link>
                 </li>
             })}
         </ul>
-        <button></button>
+        <div className="sign-out relative m-6">
+            <Button
+                name={"Sign Out"}
+                type={"submit"}
+                padding={"0.4rem 0.8rem"}
+                borderRad={"0.8rem"}
+                fw={"500"}
+                fs={"1.2rem"}
+                icon={logout}
+                click={() => {
+                    signOut(() => router.push("/signin"));
+                }}
+            />
+        </div>
     </SidebarStyled>
   )
 }
@@ -104,9 +121,8 @@ const SidebarStyled = styled.nav`
             overflow: hidden;
 
             img {
-                
-            border-radius: 100%;
-            transition: all 0.5s ease;
+                border-radius: 100%;
+                transition: all 0.5s ease;
             }
         }
 
