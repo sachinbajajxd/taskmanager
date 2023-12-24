@@ -14,7 +14,7 @@ interface Props {
 }
 
 const TaskItem: React.FC<Props> = ({title, description, date, isCompleted, id}) => {
-    const {theme} = useGlobalState();
+    const {theme, deleteTask} = useGlobalState();
   return (
     <TaskItemStyled theme={theme}>
       <h1>{title}</h1>
@@ -34,7 +34,7 @@ const TaskItem: React.FC<Props> = ({title, description, date, isCompleted, id}) 
         <button className="edit">
           {edit}
         </button>
-        <button className="delete">
+        <button className="delete" onClick={() => deleteTask(id)}>
           {trash}
         </button>
       </div>

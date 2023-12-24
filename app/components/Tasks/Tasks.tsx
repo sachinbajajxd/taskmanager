@@ -13,28 +13,34 @@ interface Props {
 
 const Tasks: React.FC<Props> = ({title, tasks}) => {
 
-    const {theme} = useGlobalState();
+    const {theme, isLoading} = useGlobalState();
 
   return (
     <TasksStyled theme={theme}>
         {/* <CreateContent /> */}
         <h1>{title}</h1>
-        <div className="tasks grid">
-            {tasks.map((task) => (
-                <TaskItem
-                    key={task.id}
-                    title={task.title}
-                    description={task.description}
-                    date={task.date}
-                    isCompleted={task.isCompleted}
-                    id={task.id}
-                />
-            ))}
-            <button className="create-task">
-                {plus}
-                Add Task
-            </button>
-        </div>
+        {!isLoading ? (
+            <div className="tasks grid">
+                {tasks.map((task) => (
+                    <TaskItem
+                        key={task.id}
+                        title={task.title}
+                        description={task.description}
+                        date={task.date}
+                        isCompleted={task.isCompleted}
+                        id={task.id}
+                    />
+                ))}
+                <button className="create-task">
+                    {plus}
+                    Add Task
+                </button>
+            </div>
+        ) : (
+            <div className="tasks-loader w-full flex items-center justify-center h-full">
+                <span className="loader"></span>
+            </div>
+        )}
     </TasksStyled>
   )
 }
