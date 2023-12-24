@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import prisma from "@/app/utils/connect";
+import { Prisma } from "@prisma/client";
 
 export async function POST(req: Request) {
     try{
@@ -57,6 +58,9 @@ export async function GET(req: Request) {
         const tasks = await prisma.task.findMany({
             where: {
                 userId,
+            },
+            orderBy: {
+                date: Prisma.SortOrder.asc,
             }
         })
 

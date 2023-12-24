@@ -11,9 +11,18 @@ export const GlobalProvider = ({children}) => {
 
     const [selectedTheme, setSelectedTheme] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [modal, setModal] = useState(false);
     const [tasks, setTasks] = useState([]);
     const {user} = useUser();
     const theme = themes[selectedTheme];
+
+    const openModal = () => {
+        setModal(true);
+    }
+
+    const closeModal = () => {
+        setModal(false);
+    }
 
     const allTasks = async () => {
         setIsLoading(true)
@@ -23,7 +32,7 @@ export const GlobalProvider = ({children}) => {
             setTasks(res.data);
             setIsLoading(false);
         } catch(error){
-            toast.error("Something went wrong");
+            toast.error("Something went wrong.");
             console.log(error);
             setIsLoading(false);
         }
@@ -34,7 +43,20 @@ export const GlobalProvider = ({children}) => {
         try{
             const res = await axios.delete(`/api/tasks/${id}`)
 
-            toast.success("task deleted");
+            toast.success("Task deleted");
+            allTasks();
+        }catch(error){
+            toast.error("something went wrong");
+            console.log(error);
+        }
+    }
+
+    const updateTask = async (task) => {
+    
+        try{
+            const res = await axios.put(`/api/tasks`, task)
+
+            toast.success("Task updated");
             allTasks();
         }catch(error){
             toast.error("something went wrong");
@@ -60,10 +82,15 @@ export const GlobalProvider = ({children}) => {
                 theme,
                 tasks,
                 deleteTask,
+                updateTask,
                 isLoading,
                 completedTasks,
                 importantTasks,
                 incompleteTasks,
+                modal,
+                openModal,
+                closeModal,
+                allTasks,
             }}
         >
             <GlobalUpdateContext.Provider value={{}}>

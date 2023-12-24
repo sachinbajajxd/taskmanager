@@ -1,37 +1,65 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { edit, trash } from '@/app/utils/Icons';
 import styled from 'styled-components';
 import { useGlobalState } from '@/app/context/globalProvider';
 import formatDate from '@/app/utils/formatDate';
+import Modal from '../Modals/Modal';
+import UpdateContent from '../Modals/UpdateContent';
 
 interface Props {
   title: string;
   description: string;
   date: string;
   isCompleted: boolean;
+  isImportant: boolean;
   id: string;
 }
 
-const TaskItem: React.FC<Props> = ({title, description, date, isCompleted, id}) => {
-    const {theme, deleteTask} = useGlobalState();
+const TaskItem: React.FC<Props> = ({title, description, date, isCompleted, id, isImportant}) => {
+    const {theme, deleteTask, updateTask, openModal, modal} = useGlobalState();
+
+    const [updateModal, setUpdateModal] = useState(false);
+
+    const showUpdateModal = () => setUpdateModal(true);
+
   return (
     <TaskItemStyled theme={theme}>
+      {updateModal && <Modal content={<UpdateContent 
+      currTitle={title}
+      currDescription={description}
+      currDate={date}
+      isCompleted={isCompleted}
+      isImportant={isImportant}
+      id={id}
+      />}  />}
       <h1>{title}</h1>
       <p>{description}</p>
       <p className='date'>{formatDate(date)}</p>
 
       <div className="task-footer">
         {isCompleted ? (
-        <button className="completed">
+        <button className="completed" onClick={() => {
+          const task={
+            id,
+            isCompleted: !isCompleted
+          }
+          updateTask(task)
+        }}>
           Completed
         </button>) : 
         (
-          <button className="incomplete">
+          <button className="incomplete" onClick={() => {
+            const task={
+              id,
+              isCompleted: !isCompleted
+            }
+            updateTask(task)
+          }}>
             Incomplete
           </button>
         )}
-        <button className="edit">
+        <button className="edit" onClick={showUpdateModal}>
           {edit}
         </button>
         <button className="delete" onClick={() => deleteTask(id)}>

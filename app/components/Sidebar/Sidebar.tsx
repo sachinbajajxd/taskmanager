@@ -15,7 +15,6 @@ const Sidebar = () => {
     const {theme} = useGlobalState()
     const {signOut} = useClerk()
     const {user} = useUser()
-    console.log(user, "USER")
     const router = useRouter()
     const pathname = usePathname()
 
@@ -82,6 +81,7 @@ const SidebarStyled = styled.nav`
   justify-content: space-between;
 
   color: ${(props) => props.theme.colorGrey3};
+
 
   .toggle-nav {
     display: none;

@@ -7,12 +7,21 @@ import styled from "styled-components";
 import Button from "../Button/Button";
 import { add, plus } from "@/app/utils/Icons";
 
-function CreateContent() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [completed, setCompleted] = useState(false);
-  const [important, setImportant] = useState(false);
+interface Props {
+  currTitle: string;
+  currDescription: string;
+  currDate: string;
+  isCompleted: boolean;
+  isImportant: boolean;
+  id: string;
+}
+
+const UpdateContent:React.FC<Props> = ({currTitle, currDescription, currDate, isCompleted, isImportant, id}) => {
+  const [title, setTitle] = useState(currTitle);
+  const [description, setDescription] = useState(currDescription);
+  const [date, setDate] = useState(currDate);
+  const [completed, setCompleted] = useState(isCompleted);
+  const [important, setImportant] = useState(isImportant);
 
   const { theme, allTasks, closeModal } = useGlobalState();
 
@@ -41,7 +50,7 @@ function CreateContent() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    const task = {
+    const updatedTask = {
       title,
       description,
       date,
@@ -50,23 +59,23 @@ function CreateContent() {
     };
 
     try {
-      const res = await axios.post("/api/tasks", task);
+      const res = await axios.put(`/api/tasks/${id}`, updatedTask);
 
       if (res.data) {
-        toast.success("Task created successfully.");
+        toast.success("Task updated successfully.");
         allTasks();
         closeModal();
       }
     } catch (error) {
-      toast.error(`Something went wrongg. ${error}`);
+      toast.error(`Something went wrong. ${error}`);
       console.log(error);
       closeModal();
     }
   };
 
   return (
-    <CreateContentStyled onSubmit={handleSubmit} theme={theme}>
-      <h1>Create a Task</h1>
+    <UpdateContentStyled onSubmit={handleSubmit} theme={theme}>
+      <h1>Update Task</h1>
       <div className="input-control">
         <label htmlFor="title">Title</label>
         <input
@@ -123,7 +132,7 @@ function CreateContent() {
       <div className="submit-btn flex justify-end">
         <Button
           type="submit"
-          name="Create Task"
+          name="Update Task"
           icon={add}
           padding={"0.8rem 2rem"}
           borderRad={"0.8rem"}
@@ -132,11 +141,11 @@ function CreateContent() {
           background={"rgb(0, 163, 255)"}
         />
       </div>
-    </CreateContentStyled>
+    </UpdateContentStyled>
   );
 }
 
-const CreateContentStyled = styled.form`
+const UpdateContentStyled = styled.form`
   > h1 {
     font-size: clamp(1.2rem, 5vw, 1.6rem);
     font-weight: 600;
@@ -215,4 +224,4 @@ const CreateContentStyled = styled.form`
   }
 `;
 
-export default CreateContent;
+export default UpdateContent;
